@@ -40,19 +40,14 @@ void loop() {
   sensorPrevState = sensorState;
 
   if (sensorState == HIGH) {
-    blinkLed(HIGH); // turn LED blink on:
+    blinkLed(); // turn LED blink on:
   } else {
-    blinkLed(LOW); // turn LED blink off:
+    digitalWrite(PIN_LED, LOW); // turn LED blink off:
   }
 }
 
-void blinkLed(bool blink){
-  if(blink){
-    ledState = !ledState;
-    digitalWrite(PIN_LED, ledState);
-    delay(500);  
-  }
-  else{
-    digitalWrite(PIN_LED, LOW);
-  }
+void blinkLed(){
+  ledState = !ledState;
+  digitalWrite(PIN_LED, ledState);
+  delay(500);  
 }
