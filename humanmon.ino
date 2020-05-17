@@ -50,9 +50,7 @@ void blinkLed(bool blink){
   if(blink){
     ledState = !ledState;
     digitalWrite(PIN_LED, ledState);
-    delay(500);
-    digitalWrite(PIN_LED, ledState);
-    delay(500);    
+    delay(500);  
   }
   else{
     digitalWrite(PIN_LED, LOW);
