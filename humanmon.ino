@@ -14,6 +14,11 @@
 int sensorState = 0;        // current sensor status
 int sensorPrevState = 0;    // previous sensor status
 bool ledState = false;
+bool ledBlinkOn = false;
+int interval = 500;
+int blinkDelay = 5000;
+int blinkCounter = 0;
+bool fallingEdgeDetected = false;
 
 void setup() {
   Serial.begin(19200);
@@ -33,21 +38,40 @@ void loop() {
   // read the state of the pushbutton value:
   sensorState = digitalRead(PIN_SENSOR);
 
-  if(sensorState != sensorPrevState){
+  if ( (sensorState == false) && (sensorState != sensorPrevState)){ // falling edge
+    fallingEdgeDetected = true;
     Serial.print("Sensor state changed to: ");
-    Serial.println(sensorState);    
+    Serial.println(sensorState);
   }
   sensorPrevState = sensorState;
 
   if (sensorState == HIGH) {
-    blinkLed(); // turn LED blink on:
+    fallingEdgeDetected = false;
+    ledBlinkOn = true;
+    blinkCounter = 0;
   } else {
-    digitalWrite(PIN_LED, LOW); // turn LED blink off:
+    blinkLed(LOW, interval); // turn LED blink off:
+  }
+
+  if ((blinkCounter < blinkDelay) || (sensorState == HIGH)) {
+    blinkLed(HIGH, interval); // turn LED blink on:
+  }
+  
+  if(blinkCounter >= 5000){
+    //blinkCounter = 0;
   }
 }
 
-void blinkLed(){
-  ledState = !ledState;
-  digitalWrite(PIN_LED, ledState);
-  delay(500);  
+void blinkLed(bool blink, int interval){
+  if(blink){
+    ledState = !ledState;
+    digitalWrite(PIN_LED, ledState);
+    delay(interval);
+
+    if(fallingEdgeDetected)
+      blinkCounter += interval;
+  }
+  else{
+    digitalWrite(PIN_LED, LOW);
+  }
 }
