@@ -15,8 +15,8 @@ int sensorState = 0;        // current sensor status
 int sensorPrevState = 0;    // previous sensor status
 bool ledState = false;
 bool ledBlinkOn = false;
-int interval = 500;
-int blinkDelay = 5000;
+int interval = 250;
+int blinkDelay = 60000;
 int blinkCounter = 0;
 bool fallingEdgeDetected = false;
 
